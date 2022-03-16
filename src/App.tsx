@@ -2,9 +2,11 @@ import {
   SearchBar,
   UniversalResults,
   StandardCard,
+  StandardCardProps,
+  FieldData,
+  FieldDataConstant,
 } from "@yext/answers-react-components";
 import FSTrainer from "./components/FSTrainer";
-import { useAnswersState, Result } from "@yext/answers-headless-react";
 
 function App() {
   return (
@@ -15,7 +17,19 @@ function App() {
           <FSTrainer />
           <UniversalResults verticalConfigMap={{
             'wiki_bios': {
-              CardComponent: StandardCard
+              CardComponent: (props) =>
+                <StandardCard
+                  result={props.result}
+                  fieldMappings={{
+                    title: {
+                      apiName: 'name',
+                      mappingType: 'FIELD'
+                    },
+                    description: {
+                      apiName: 's_snippet',
+                      mappingType: 'FIELD'
+                    }
+                  }} />
             }
           }} />
         </div>

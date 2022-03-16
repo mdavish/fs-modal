@@ -3,6 +3,8 @@ import {
   UniversalResults,
   StandardCard,
 } from "@yext/answers-react-components";
+import FSTrainer from "./components/FSTrainer";
+import { useAnswersState, Result } from "@yext/answers-headless-react";
 
 function App() {
   return (
@@ -10,6 +12,7 @@ function App() {
       <div className="mt-20 grid">
         <div className="mx-auto w-2/5">
           <SearchBar />
+          <FSTrainer />
           <UniversalResults verticalConfigMap={{
             'wiki_bios': {
               CardComponent: StandardCard
@@ -21,4 +24,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

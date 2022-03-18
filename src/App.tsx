@@ -2,9 +2,8 @@ import {
   SearchBar,
   UniversalResults,
   StandardCard,
-  StandardCardProps,
-  FieldData,
-  FieldDataConstant,
+  VerticalResults,
+  StandardSection,
 } from "@yext/answers-react-components";
 import FSTrainer from "./components/FSTrainer";
 
@@ -15,21 +14,28 @@ function App() {
         <div className="mx-auto w-2/5">
           <SearchBar />
           <FSTrainer />
+          <VerticalResults CardComponent={({ result }) => <StandardCard result={result} />} />
           <UniversalResults verticalConfigMap={{
             'wiki_bios': {
-              CardComponent: (props) =>
+              SectionComponent: ({ verticalKey, results }) =>
+                <StandardSection
+                  header={<h1 className="mt-1 mb-3 font-bold ml-1">US Presidents</h1>}
+                  verticalKey={verticalKey}
+                  results={results} />,
+              CardComponent: ({ result }) =>
                 <StandardCard
-                  result={props.result}
+                  result={result}
                   fieldMappings={{
                     title: {
-                      apiName: 'name',
-                      mappingType: 'FIELD'
+                      apiName: "name",
+                      mappingType: "FIELD",
                     },
                     description: {
-                      apiName: 's_snippet',
-                      mappingType: 'FIELD'
+                      apiName: "s_snippet",
+                      mappingType: "FIELD",
                     }
-                  }} />
+                  }}
+                />
             }
           }} />
         </div>

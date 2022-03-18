@@ -5,15 +5,16 @@ import { AiOutlineSearch } from "react-icons/ai";
 import DropDown, { DropDownOption } from "./DropDown";
 import InteractiveText from "./InteractiveText";
 
-
 interface FSModalProps {
   open: boolean;
   onClose: () => void;
+  onSave: () => void;
 }
 
-const FSModal: React.FC<FSModalProps> = ({ open, onClose }) => {
+const FSModal: React.FC<FSModalProps> = ({ open, onClose, onSave }) => {
   const query = useAnswersState(s => s.query);
-  const verticals = useAnswersState(s => s.universal.verticals)
+  const verticals = useAnswersState(s => s.universal.verticals);
+  const directAnswer = useAnswersState(s => s.directAnswer);
   const verticalResults: Result[] = verticals?.[0].results ?? [];
   const dropdownOptions = verticalResults.map(result => ({
     id: result.id as string,
@@ -41,13 +42,45 @@ const FSModal: React.FC<FSModalProps> = ({ open, onClose }) => {
           <span className="my-auto mr-4"><AiOutlineSearch /></span>{query.input}
         </div>
         <div className="flex flex-row">
-          <div className="w-1/2">
+          <div className="w-1/2 pr-3">
             <h3 className="text-gray-600">Select an Entity</h3>
             <DropDown
               selectedOption={selectedEntity}
               options={dropdownOptions}
               onChange={(option) => setSelectedEntity(option)} />
             <InteractiveText entityId={selectedEntity.id} />
+          </div>
+          <div className="w-1/2 pl-3 flex flex-col gap-y-6">
+            <div className="w-full">
+              <h3 className="text-gray-600 mb-2">Algorithm's Answer</h3>
+              <div className="w-full p-2 border border-gray-300 rounded-md">
+                {
+                  directAnswer.result ?
+                    <div>
+                      <h3 className="">{directAnswer.result.value}</h3>
+                      <p className="pt-2 text-sm"> From <span className="text-blue-800">{directAnswer.result.relatedResult.name}</span></p>
+                    </div> : <div className="uppercase text-gray-600">No Answer</div>
+                }
+              </div>
+            </div>
+            <div className="w-full">
+              <h3 className="text-gray-600 mb-2">Updated Answer</h3>
+              <div className="w-full p-2 border border-gray-300 rounded-md">
+                {
+                  directAnswer.result ?
+                    <div>
+                      <h3 className="">{directAnswer.result.value}</h3>
+                      <p className="pt-2 text-sm"> From <span className="text-blue-800">{directAnswer.result.relatedResult.name}</span></p>
+                    </div> : <div className="uppercase text-gray-600">No Answer</div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mt-2 w-full flex flex-row">
+          <div className="flex flex-row ml-auto gap-x-4 items-center">
+            <button onClick={onClose} className="text-blue-900">Cancel</button>
+            <button onClick={onSave} className="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-md">Save</button>
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ const FSTrainer: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
 
   const directAnswer = useAnswersState(s => s.directAnswer);
-  const isLoading = useAnswersState(s => s.searchStatus.isLoading); c
+  const isLoading = useAnswersState(s => s.searchStatus.isLoading);
   const mostRecentSearch = useAnswersState(s => s.query.mostRecentSearch)
 
   if (isLoading || !mostRecentSearch) {
@@ -35,6 +35,7 @@ const FSTrainer: React.FC = () => {
       <FSModal
         open={showModal}
         onClose={() => setShowModal(false)}
+        onSave={() => setShowModal(false)}
       />
     </>
   )

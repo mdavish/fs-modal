@@ -62,7 +62,7 @@ const InteractiveText: React.FC<InteractiveTextProps> = ({
           (!loading && entityData) ?
             <div className='p-4 leading-5 text-gray-800'>
               {
-                (directAnswer.relatedResult.id === entityId) ?
+                (directAnswer?.relatedResult.id === entityId) ?
                   <HighlightedText
                     offset={updatedOffset}
                     length={directAnswer.snippet.matchedSubstrings[0].length}

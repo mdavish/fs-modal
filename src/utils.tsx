@@ -1,3 +1,7 @@
+import { FeaturedSnippetDirectAnswer } from "@yext/answers-headless-react";
+import { FeaturedSnippet } from "./types";
+
+
 export function findUpdatedOffset(
   fullBody: string,
   bodyExcerpt: string,
@@ -9,4 +13,12 @@ export function findUpdatedOffset(
   const additionalOffset = bodyExcerpt.indexOf(trimmedExcerpt);
   const bodyOffset = fullBody.indexOf(trimmedExcerpt);
   return originalOffset + bodyOffset - additionalOffset
-} 
+}
+
+export const directAnswerToFS = (directAnswer: FeaturedSnippetDirectAnswer): FeaturedSnippet => {
+  return {
+    resultText: directAnswer.snippet.value,
+    offset: directAnswer.snippet.matchedSubstrings[0].offset,
+    length: directAnswer.snippet.matchedSubstrings[0].length,
+  }
+}

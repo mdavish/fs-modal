@@ -40,19 +40,19 @@ const FSModal: React.FC<FSModalProps> = ({ open, onClose, onSave }) => {
         <div className="ml-auto mb-4 flex flex-row bg-gray-100 text-gray-600 m-4 px-4 py-2 rounded-full">
           <span className="my-auto mr-4"><AiOutlineSearch /></span>{query.input}
         </div>
+        <h3 className="text-gray-600">Select an Entity</h3>
+        <DropDown
+          selectedOption={selectedEntity}
+          options={dropdownOptions}
+          onChange={(option) => setSelectedEntity(option)} />
         <div className="flex flex-row">
           <div className="w-1/2 pr-3">
-            <h3 className="text-gray-600">Select an Entity</h3>
-            <DropDown
-              selectedOption={selectedEntity}
-              options={dropdownOptions}
-              onChange={(option) => setSelectedEntity(option)} />
             <InteractiveText entityId={selectedEntity.id} />
           </div>
           <div className="w-1/2 pl-3 flex flex-col gap-y-6">
-            <div className="w-full">
+            <div className="w-full mt-3">
               <h3 className="text-gray-600 mb-2">Algorithm's Answer</h3>
-              <div className="w-full p-2 border border-gray-300 rounded-md">
+              <div className="mt-2 w-full p-2 border border-gray-300 rounded-md">
                 {
                   directAnswer.result ?
                     <div>

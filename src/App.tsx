@@ -6,8 +6,22 @@ import {
   StandardSection,
 } from "@yext/answers-react-components";
 import FSTrainer from "./components/FSTrainer";
+import { FeaturedSnippetDirectAnswer, useAnswersActions } from "@yext/answers-headless-react";
+import { useStoreActions } from "./store";
+import { directAnswerToFS } from "./utils";
 
 function App() {
+
+  const answers = useAnswersActions();
+  const setOriginalSnippet = useStoreActions((a) => a.setOriginalSnippet);
+  answers.addListener<FeaturedSnippetDirectAnswer>({
+    valueAccessor: (state => state.directAnswer.result as FeaturedSnippetDirectAnswer),
+    callback: (directAnswer) => {
+      const reformattedAnswer = directAnswerToFS(directAnswer);
+      setOriginalSnippet(reformattedAnswer);
+    }
+  })
+
   return (
     <div className="w-screen h-screen">
       <div className="mt-20 grid">

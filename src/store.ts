@@ -14,6 +14,8 @@ interface StoreModel {
   setOriginalSnippet: Action<StoreModel, FeaturedSnippet>;
   setUpdatedSnippet: Action<StoreModel, FeaturedSnippet>;
   status: Computed<StoreModel, "UNEDITED" | "MODIFIED" | "APPROVED" | "REJECTED">;
+  showFSModal: boolean;
+  setShowFSModal: Action<StoreModel, boolean>;
 }
 
 export const store = createStore<StoreModel>({
@@ -39,7 +41,11 @@ export const store = createStore<StoreModel>({
       return updatedSnippet ? "MODIFIED" : "UNEDITED"
     }
   }
-  )
+  ),
+  showFSModal: false,
+  setShowFSModal: action((state, show) => {
+    state.showFSModal = show;
+  }),
 })
 
 const typedHooks = createTypedHooks<StoreModel>();

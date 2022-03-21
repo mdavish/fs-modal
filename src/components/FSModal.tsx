@@ -4,14 +4,12 @@ import { useAnswersState, Result } from "@yext/answers-headless-react";
 import { AiOutlineSearch } from "react-icons/ai";
 import DropDown from "./DropDown";
 import InteractiveText from "./InteractiveText";
+import { useStoreState, useStoreActions } from "./../store";
 
-interface FSModalProps {
-  open: boolean;
-  onClose: () => void;
-  onSave: () => void;
-}
 
-const FSModal: React.FC<FSModalProps> = ({ open, onClose, onSave }) => {
+const FSModal: React.FC = () => {
+  const showFSModal = useStoreState(s => s.showFSModal);
+  const setShowFSModal = useStoreActions(a => a.setShowFSModal);
   const query = useAnswersState(s => s.query);
   const verticals = useAnswersState(s => s.universal.verticals);
   const directAnswer = useAnswersState(s => s.directAnswer);
@@ -25,8 +23,8 @@ const FSModal: React.FC<FSModalProps> = ({ open, onClose, onSave }) => {
   return (
     <Dialog
       className="fixed z-10 inset-0 overflow-y-auto"
-      open={open}
-      onClose={onClose}>
+      open={showFSModal}
+      onClose={setShowFSModal}>
       <Dialog.Overlay className="fixed w-full h-full grid items-center inset-0 bg-black/20 backdrop-blur-sm" />
       <div className="p-6 relative z-40 mx-auto my-24 bg-white w-2/3 lg:w-1/2 rounded-md">
         <div className="pb-2 border-b border-gray-200">
@@ -78,8 +76,8 @@ const FSModal: React.FC<FSModalProps> = ({ open, onClose, onSave }) => {
         </div>
         <div className="mt-2 w-full flex flex-row">
           <div className="flex flex-row ml-auto gap-x-4 items-center">
-            <button onClick={onClose} className="text-blue-900">Cancel</button>
-            <button onClick={onSave} className="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-md">Save</button>
+            <button onClick={() => setShowFSModal(false)} className="text-blue-900">Cancel</button>
+            <button onClick={() => setShowFSModal(false)} className="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-md">Save</button>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ export interface FeaturedSnippet {
   resultText: string;  // Excerpt of document body
   offset: number;
   length: number;
+  value?: string; // For convenience - technically can be inferred by other two
 }
 
 export interface FeaturedSnippetOverride {

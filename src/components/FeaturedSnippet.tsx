@@ -1,34 +1,37 @@
 import React from 'react';
-import { useAnswersState, FeaturedSnippetDirectAnswer } from "@yext/answers-headless-react";
 import { IoColorWand } from "react-icons/io5";
+import { useStoreState, useStoreActions } from "./../store";
 
-interface FeaturedSnippetProps {
-  onTrain: () => void;
-}
+const FeaturedSnippet: React.FC = () => {
 
-const FeaturedSnippet: React.FC<FeaturedSnippetProps> = ({ onTrain }) => {
-  const directAnswer = useAnswersState(s => s.directAnswer.result) as FeaturedSnippetDirectAnswer;
+  const originalSnippet = useStoreState(s => s.originalSnippet);
+  const updatedSnippet = useStoreState(s => s.updatedSnippet);
+  const setShowFSModal = useStoreActions(a => a.setShowFSModal);
 
-  if (!directAnswer) {
+  const snippetToDisplay = updatedSnippet ?? originalSnippet;
+
+  if (!snippetToDisplay) {
     return <></>
   }
+
+  const { offset, length } = snippetToDisplay;
 
   return (
     <div className='rounded-md bg-blue-100 border border-blue-600 p-4 focs:outline-none'>
       <div className='flex flex-row mb-2'>
         <button
-          onClick={onTrain}
+          onClick={() => setShowFSModal(true)}
           className='mx-auto my-auto flex flex-row text-blue-600 hover:text-blue-800'>
           <IoColorWand className='my-auto mr-2' /> Train Featured Snippet
         </button>
       </div>
       <div className='bg-white p-4 border border-gray-200 rounded-md'>
-        {directAnswer.value &&
+        {snippetToDisplay?.resultText &&
           <div className='text-gray-800 text-lg font-medium'>
-            {directAnswer.value}
+            {snippetToDisplay.resultText.slice(offset, offset + length)}
           </div>}
         <div className='mt-2 text-sm'>
-          {directAnswer.snippet.value}
+          {snippetToDisplay.resultText}
         </div>
       </div>
     </div>

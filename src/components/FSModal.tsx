@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { useAnswersState, Result } from "@yext/answers-headless-react";
 import { AiOutlineSearch } from "react-icons/ai";
-import DropDown, { DropDownOption } from "./DropDown";
+import DropDown from "./DropDown";
 import InteractiveText from "./InteractiveText";
 
 interface FSModalProps {
@@ -28,8 +28,7 @@ const FSModal: React.FC<FSModalProps> = ({ open, onClose, onSave }) => {
       open={open}
       onClose={onClose}>
       <Dialog.Overlay className="fixed w-full h-full grid items-center inset-0 bg-black/20 backdrop-blur-sm" />
-
-      <div className="p-6 relative z-40 mx-auto mt-40 bg-white w-1/2 rounded-md">
+      <div className="p-6 relative z-40 mx-auto my-24 bg-white w-2/3 lg:w-1/2 rounded-md">
         <div className="pb-2 border-b border-gray-200">
           <Dialog.Title className="text-xl text-gray-700 font-medium">
             Train Featured Snippets

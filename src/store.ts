@@ -17,6 +17,8 @@ interface StoreModel {
   status: Computed<StoreModel, "UNEDITED" | "MODIFIED" | "APPROVED" | "REJECTED">;
   showFSModal: boolean;
   setShowFSModal: Action<StoreModel, boolean>;
+  selectedEntity?: { name: string, id: string };
+  setSelectedEntity: Action<StoreModel, { name: string, id: string }>;
 }
 
 export const store = createStore<StoreModel>({
@@ -53,7 +55,7 @@ export const store = createStore<StoreModel>({
       if (updatedSnippet) {
         return originalSnippet === updatedSnippet ? "APPROVED" : "MODIFIED"
       } else {
-        return "REJECTED"
+        return "UNEDITED"
       }
     } else {
       return updatedSnippet ? "MODIFIED" : "UNEDITED"
@@ -63,6 +65,9 @@ export const store = createStore<StoreModel>({
   showFSModal: false,
   setShowFSModal: action((state, show) => {
     state.showFSModal = show;
+  }),
+  setSelectedEntity: action((state, entity) => {
+    state.selectedEntity = entity;
   }),
 })
 

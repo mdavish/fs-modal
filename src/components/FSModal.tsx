@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { useAnswersState, Result } from "@yext/answers-headless-react";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -9,17 +8,20 @@ import { useStoreState, useStoreActions } from "./../store";
 
 const FSModal: React.FC = () => {
   const showFSModal = useStoreState(s => s.showFSModal);
+  const selectedEntity = useStoreState(s => s.selectedEntity) as { id: string, name: string };
+  const displaySnippet = useStoreState(s => s.displaySnippet);
+  const originalSnippet = useStoreState(s => s.originalSnippet);
+  const status = useStoreState(s => s.status);
   const setShowFSModal = useStoreActions(a => a.setShowFSModal);
+  const setSelectedEntity = useStoreActions(a => a.setSelectedEntity);
   const query = useAnswersState(s => s.query);
   const verticals = useAnswersState(s => s.universal.verticals);
-  const directAnswer = useAnswersState(s => s.directAnswer);
   const verticalResults: Result[] = verticals?.[0].results ?? [];
   const dropdownOptions = verticalResults.map(result => ({
     id: result.id as string,
     displayKey: result.name as string,
   }))
   // TODO Select based on featured snippet.
-  const [selectedEntity, setSelectedEntity] = useState(dropdownOptions[0]);
   return (
     <Dialog
       className="fixed z-10 inset-0 overflow-y-auto"
@@ -40,9 +42,9 @@ const FSModal: React.FC = () => {
         </div>
         <h3 className="text-gray-600">Select an Entity</h3>
         <DropDown
-          selectedOption={selectedEntity}
+          selectedOption={{ displayKey: selectedEntity.name, id: selectedEntity.id }}
           options={dropdownOptions}
-          onChange={(option) => setSelectedEntity(option)} />
+          onChange={(option) => setSelectedEntity({ id: option.id, name: option.displayKey })} />
         <div className="flex flex-row">
           <div className="w-1/2 pr-3">
             <InteractiveText entityId={selectedEntity.id} />
@@ -52,26 +54,28 @@ const FSModal: React.FC = () => {
               <h3 className="text-gray-600 mb-2">Algorithm's Answer</h3>
               <div className="mt-2 w-full p-2 border border-gray-300 rounded-md">
                 {
-                  directAnswer.result ?
+                  originalSnippet ?
                     <div>
-                      <h3 className="">{directAnswer.result.value}</h3>
-                      <p className="pt-2 text-sm"> From <span className="text-blue-800">{directAnswer.result.relatedResult.name}</span></p>
+                      <h3 className="">{originalSnippet.value}</h3>
+                      <p className="pt-2 text-sm"> From <span className="text-blue-800">{originalSnippet.entity.name}</span></p>
                     </div> : <div className="uppercase text-gray-600">No Answer</div>
                 }
               </div>
             </div>
-            <div className="w-full">
-              <h3 className="text-gray-600 mb-2">Updated Answer</h3>
-              <div className="w-full p-2 border border-gray-300 rounded-md">
-                {
-                  directAnswer.result ?
-                    <div>
-                      <h3 className="">{directAnswer.result.value}</h3>
-                      <p className="pt-2 text-sm"> From <span className="text-blue-800">{directAnswer.result.relatedResult.name}</span></p>
-                    </div> : <div className="uppercase text-gray-600">No Answer</div>
-                }
+            {(status !== "UNEDITED") &&
+              <div className="w-full">
+                <h3 className="text-gray-600 mb-2">Updated Answer</h3>
+                <div className="w-full p-2 border border-gray-300 rounded-md">
+                  {
+                    displaySnippet ?
+                      <div>
+                        <h3 className="">{displaySnippet.value}</h3>
+                        <p className="pt-2 text-sm"> From <span className="text-blue-800">{displaySnippet.entity.name}</span></p>
+                      </div> : <div className="uppercase text-gray-600">No Answer</div>
+                  }
+                </div>
               </div>
-            </div>
+            }
           </div>
         </div>
         <div className="mt-2 w-full flex flex-row">
@@ -82,7 +86,7 @@ const FSModal: React.FC = () => {
         </div>
       </div>
 
-    </Dialog>
+    </Dialog >
   )
 }
 

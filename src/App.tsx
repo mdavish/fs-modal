@@ -6,19 +6,42 @@ import {
   StandardSection,
 } from "@yext/answers-react-components";
 import FSTrainer from "./components/FSTrainer";
-import { FeaturedSnippetDirectAnswer, useAnswersActions } from "@yext/answers-headless-react";
+import { FeaturedSnippetDirectAnswer, useAnswersActions, Result } from "@yext/answers-headless-react";
 import { useStoreActions } from "./store";
 import { directAnswerToFS } from "./utils";
+
+interface ListenerType {
+  directAnswer?: FeaturedSnippetDirectAnswer;
+  verticalResults?: Result[];
+}
 
 function App() {
 
   const answers = useAnswersActions();
   const setOriginalSnippet = useStoreActions((a) => a.setOriginalSnippet);
-  answers.addListener<FeaturedSnippetDirectAnswer>({
-    valueAccessor: (state => state.directAnswer.result as FeaturedSnippetDirectAnswer),
-    callback: (directAnswer) => {
-      const reformattedAnswer = directAnswerToFS(directAnswer);
-      setOriginalSnippet(reformattedAnswer);
+  const setSelectedEntity = useStoreActions((a) => a.setSelectedEntity);
+  answers.addListener<ListenerType>({
+    valueAccessor: (state => {
+      return {
+        directAnswer: state.directAnswer.result as FeaturedSnippetDirectAnswer,
+        verticalResults: state.universal.verticals?.[0].results ?? [],
+      }
+    }),
+    callback: ({ directAnswer, verticalResults }) => {
+      if (directAnswer) {
+        const reformattedAnswer = directAnswerToFS(directAnswer);
+        setOriginalSnippet(reformattedAnswer);
+        setSelectedEntity({
+          id: directAnswer.relatedResult.id as string,
+          name: directAnswer.relatedResult.name as string,
+        })
+        return
+      } else if (verticalResults) {
+        setSelectedEntity({
+          id: verticalResults[0]?.id as string,
+          name: verticalResults[0]?.name as string,
+        })
+      }
     }
   })
 

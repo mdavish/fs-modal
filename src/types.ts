@@ -1,4 +1,8 @@
 export interface FeaturedSnippet {
+  entity: {
+    id: string;
+    name: string;
+  }
   resultText: string;  // Excerpt of document body
   offset: number;
   length: number;

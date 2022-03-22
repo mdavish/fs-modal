@@ -1,4 +1,5 @@
 import React, { ReactEventHandler } from "react";
+import { useStoreActions, useStoreState } from "../store";
 
 interface HighlightedTextProps {
   text: string,
@@ -12,13 +13,27 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
   length,
 }) => {
 
+  const setUpdatedSnippet = useStoreActions(a => a.setUpdatedSnippet);
+  const selectedEntity = useStoreState(s => s.selectedEntity);
   const handleSelection: ReactEventHandler<HTMLDivElement> = () => {
     const selection = window.getSelection();
-    const offset = selection?.anchorOffset;
+    if (selection) {
+      const offset = selection?.anchorOffset;
+      const length = selection?.toString().length;
+      setUpdatedSnippet({
+        entity: {
+          id: selectedEntity?.id as string,
+          name: selectedEntity?.name as string,
+        },
+        offset,
+        length,
+        resultText: text.slice(Math.max(offset - 250, 0), offset + length + 250),
+      });
+    }
   }
 
   return (
-    <div onSelect={handleSelection}>
+    <div onMouseUp={handleSelection}>
       {
         (offset && length) ?
           <>

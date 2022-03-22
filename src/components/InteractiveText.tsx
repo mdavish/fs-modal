@@ -68,7 +68,7 @@ const InteractiveText: React.FC<InteractiveTextProps> = ({
                   /> : <HighlightedText text={entityData.response.c_body} />
               }
             </div> : [...Array(10).keys()].map(i => (
-              <div className="rounded-lg mx-4 mt-3 h-4 animate-pulse bg-gray-300" />
+              <div key={i} className="rounded-lg mx-4 mt-3 h-4 animate-pulse bg-gray-300" />
             ))
         }
       </div>

@@ -25,7 +25,7 @@ function App() {
   return (
     <div className="w-screen h-screen">
       <div className="mt-20 grid">
-        <div className="mx-auto w-2/5">
+        <div className="mx-auto w-1/2 lg:w-2/5">
           <SearchBar />
           <FSTrainer />
           <VerticalResults CardComponent={({ result }) => <StandardCard result={result} />} />

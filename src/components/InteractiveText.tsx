@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import { useAnswersState, FeaturedSnippetDirectAnswer } from "@yext/answers-headless-react"
 import { findUpdatedOffset } from "./../utils";
 import HighlightedText from "./HighlightedText";
+import { useStoreState } from "./../store";
 
 interface HighlightedText {
   offset: number;
@@ -28,9 +28,7 @@ const InteractiveText: React.FC<InteractiveTextProps> = ({
 
   const [entityData, setEntityData] = useState<EntityResponse | undefined>(undefined);
   const [loading, setLoading] = useState(true);
-
-  const directAnswer = useAnswersState(s => s.directAnswer.result) as FeaturedSnippetDirectAnswer;
-
+  const displaySnippet = useStoreState(s => s.displaySnippet);
 
   useEffect(() => {
     const params = {
@@ -46,11 +44,11 @@ const InteractiveText: React.FC<InteractiveTextProps> = ({
   }, [entityId])
 
   let updatedOffset: number | undefined = undefined;
-  if (entityData && directAnswer) {
+  if (entityData && displaySnippet) {
     updatedOffset = findUpdatedOffset(
       entityData.response.c_body,
-      directAnswer.snippet.value,
-      directAnswer.snippet.matchedSubstrings[0].offset,
+      displaySnippet.resultText,
+      displaySnippet.offset,
     );
   }
 
@@ -62,10 +60,10 @@ const InteractiveText: React.FC<InteractiveTextProps> = ({
           (!loading && entityData) ?
             <div className='p-4 leading-5 text-gray-800'>
               {
-                (directAnswer?.relatedResult.id === entityId) ?
+                (displaySnippet !== undefined) ?
                   <HighlightedText
                     offset={updatedOffset}
-                    length={directAnswer.snippet.matchedSubstrings[0].length}
+                    length={displaySnippet.length}
                     text={entityData.response.c_body}
                   /> : <HighlightedText text={entityData.response.c_body} />
               }

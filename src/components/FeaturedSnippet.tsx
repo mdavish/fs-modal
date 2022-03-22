@@ -21,7 +21,7 @@ const FeaturedSnippet: React.FC = () => {
       <div className='flex flex-row mb-2'>
         <button
           onClick={() => setShowFSModal(true)}
-          className='mx-auto my-auto flex flex-row text-blue-600 hover:text-blue-800'>
+          className='mx-auto my-auto flex flex-row text-blue-600 hover:text-blue-800 focus:ring-none'>
           <IoColorWand className='my-auto mr-2' /> Train Featured Snippet
         </button>
       </div>

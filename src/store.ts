@@ -11,6 +11,7 @@ import { FeaturedSnippet } from "./types";
 interface StoreModel {
   originalSnippet?: FeaturedSnippet;
   updatedSnippet?: FeaturedSnippet;
+  displaySnippet: Computed<StoreModel, FeaturedSnippet | undefined, StoreModel>;
   setOriginalSnippet: Action<StoreModel, FeaturedSnippet>;
   setUpdatedSnippet: Action<StoreModel, FeaturedSnippet>;
   status: Computed<StoreModel, "UNEDITED" | "MODIFIED" | "APPROVED" | "REJECTED">;
@@ -21,6 +22,23 @@ interface StoreModel {
 export const store = createStore<StoreModel>({
   originalSnippet: undefined,
   updatedSnippet: undefined,
+  displaySnippet: computed([
+    s => s.originalSnippet,
+    s => s.updatedSnippet
+  ], (originalSnippet, updatedSnippet) => {
+    const displaySnip = updatedSnippet ?? originalSnippet;
+    if (displaySnip !== undefined) {
+      return {
+        value: displaySnip.resultText.slice(
+          displaySnip.offset,
+          displaySnip.offset + displaySnip.length
+        ),
+        ...displaySnip,
+      }
+    } else {
+      return displaySnip
+    }
+  }),
   setOriginalSnippet: action((state, snippet) => {
     state.originalSnippet = snippet;
   }),

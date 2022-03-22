@@ -1,11 +1,9 @@
-import React from "react";
+import React, { ReactEventHandler } from "react";
 
 interface HighlightedTextProps {
   text: string,
   offset?: number,
   length?: number,
-  onUpdate?: (offset: number, length: number) => void;
-  onRemove?: () => void;
 }
 
 const HighlightedText: React.FC<HighlightedTextProps> = ({
@@ -13,8 +11,14 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
   offset,
   length,
 }) => {
+
+  const handleSelection: ReactEventHandler<HTMLDivElement> = () => {
+    const selection = window.getSelection();
+    const offset = selection?.anchorOffset;
+  }
+
   return (
-    <>
+    <div onSelect={handleSelection}>
       {
         (offset && length) ?
           <>
@@ -24,7 +28,7 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
           </> :
           <>{text}</>
       }
-    </>
+    </div>
   )
 }
 

@@ -17,7 +17,7 @@ interface EntityResponse {
     id: string
   };
   response: {
-    c_body: string;
+    body: string;
   }
   onHighlight: (event: HighlightedText) => void;
 }
@@ -28,25 +28,30 @@ const InteractiveText: React.FC<InteractiveTextProps> = ({
 
   const [entityData, setEntityData] = useState<EntityResponse | undefined>(undefined);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<boolean>(false);
   const displaySnippet = useStoreState(s => s.displaySnippet);
 
   useEffect(() => {
     const params = {
-      api_key: '54748246e648d315c59bec5b05c61ebb',
+      api_key: '1c81e4de0ec0e8051bdf66c31fc26a45',
       v: '20220101'
     }
     axios.get(`https://liveapi.yext.com/v2/accounts/me/entities/${entityId}`, { params })
       .then(res => {
         setEntityData(res.data);
+        console.log({ data: res.data })
         setLoading(false);
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        setError(true);
+      })
   }, [entityId])
 
   let updatedOffset: number | undefined = undefined;
   if (entityData && displaySnippet) {
     updatedOffset = findUpdatedOffset(
-      entityData.response.c_body,
+      entityData.response.body,
       displaySnippet.resultText,
       displaySnippet.offset,
     );
@@ -64,8 +69,8 @@ const InteractiveText: React.FC<InteractiveTextProps> = ({
                   <HighlightedText
                     offset={updatedOffset}
                     length={displaySnippet.length}
-                    text={entityData.response.c_body}
-                  /> : <HighlightedText text={entityData.response.c_body} />
+                    text={entityData.response.body}
+                  /> : <HighlightedText text={entityData.response.body} />
               }
             </div> : [...Array(10).keys()].map(i => (
               <div key={i} className="rounded-lg mx-4 mt-3 h-4 animate-pulse bg-gray-300" />

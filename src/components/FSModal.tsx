@@ -1,5 +1,5 @@
 import { Dialog } from "@headlessui/react";
-import { useAnswersState, Result } from "@yext/answers-headless-react";
+import { useSearchState, Result, useSearchActions } from "@yext/search-headless-react";
 import { AiOutlineSearch } from "react-icons/ai";
 import DropDown from "./DropDown";
 import InteractiveText from "./InteractiveText";
@@ -14,8 +14,8 @@ const FSModal: React.FC = () => {
   const status = useStoreState(s => s.status);
   const setShowFSModal = useStoreActions(a => a.setShowFSModal);
   const setSelectedEntity = useStoreActions(a => a.setSelectedEntity);
-  const query = useAnswersState(s => s.query);
-  const verticals = useAnswersState(s => s.universal.verticals);
+  const query = useSearchState(s => s.query);
+  const verticals = useSearchState(s => s.universal.verticals);
   const verticalResults: Result[] = verticals?.[0].results ?? [];
   const dropdownOptions = verticalResults.map(result => ({
     id: result.id as string,

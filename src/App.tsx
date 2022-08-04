@@ -4,9 +4,13 @@ import {
   StandardCard,
   VerticalResults,
   StandardSection,
-} from "@yext/answers-react-components";
+} from "@yext/search-ui-react";
 import FSTrainer from "./components/FSTrainer";
-import { FeaturedSnippetDirectAnswer, useAnswersActions, Result } from "@yext/answers-headless-react";
+import {
+  FeaturedSnippetDirectAnswer,
+  useSearchActions,
+  Result
+} from "@yext/search-headless-react";
 import { useStoreActions } from "./store";
 import { directAnswerToFS } from "./utils";
 
@@ -17,11 +21,11 @@ interface ListenerType {
 
 function App() {
 
-  const answers = useAnswersActions();
+  const searchActions = useSearchActions();
   const setOriginalSnippet = useStoreActions((a) => a.setOriginalSnippet);
   const setUpdatedSnippet = useStoreActions((a) => a.setUpdatedSnippet);
   const setSelectedEntity = useStoreActions((a) => a.setSelectedEntity);
-  answers.addListener<ListenerType>({
+  searchActions.addListener<ListenerType>({
     valueAccessor: (state => {
       return {
         directAnswer: state.directAnswer.result as FeaturedSnippetDirectAnswer,
@@ -51,32 +55,15 @@ function App() {
     <div className="w-screen h-screen">
       <div className="mt-20 grid">
         <div className="mx-auto w-1/2 lg:w-2/5">
-          <SearchBar />
+          <SearchBar recentSearchesLimit={0} />
           <FSTrainer />
-          <VerticalResults CardComponent={({ result }) => <StandardCard result={result} />} />
-          <UniversalResults verticalConfigMap={{
-            'wiki_bios': {
-              SectionComponent: ({ verticalKey, results }) =>
-                <StandardSection
-                  header={<h1 className="mt-1 mb-3 font-bold ml-1">US Presidents</h1>}
-                  verticalKey={verticalKey}
-                  results={results} />,
-              CardComponent: ({ result }) =>
-                <StandardCard
-                  result={result}
-                  fieldMappings={{
-                    title: {
-                      apiName: "name",
-                      mappingType: "FIELD",
-                    },
-                    description: {
-                      apiName: "s_snippet",
-                      mappingType: "FIELD",
-                    }
-                  }}
-                />
-            }
-          }} />
+          <UniversalResults
+            customCssClasses={{
+              universalResultsContainer: "mt-10"
+            }}
+            verticalConfigMap={{
+
+            }} />
         </div>
       </div>
     </div >

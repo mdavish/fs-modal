@@ -2,7 +2,7 @@ module.exports = {
   content: [
     './src/**/*.{js,jsx,ts,tsx}',
     './public/index.html',
-    './node_modules/@yext/answers-react-components/lib/**/*.js'
+    './node_modules/@yext/search-ui-react/lib/**/*.js'
   ],
   theme: {
     extend: {},

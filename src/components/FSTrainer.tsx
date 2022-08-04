@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAnswersState } from '@yext/answers-headless-react';
+import { useSearchState } from '@yext/search-headless-react';
 import { IoColorWand } from "react-icons/io5";
 import FSModal from './FSModal';
 import FeaturedSnippet from './FeaturedSnippet';
@@ -8,8 +8,8 @@ import { useStoreState, useStoreActions } from "./../store";
 
 const FSTrainer: React.FC = () => {
 
-  const isLoading = useAnswersState(s => s.searchStatus.isLoading);
-  const mostRecentSearch = useAnswersState(s => s.query.mostRecentSearch);
+  const isLoading = useSearchState(s => s.searchStatus.isLoading);
+  const mostRecentSearch = useSearchState(s => s.query.mostRecentSearch);
   const setShowFSModal = useStoreActions(a => a.setShowFSModal);
   const displaySnippet = useStoreState(s => s.displaySnippet);
 

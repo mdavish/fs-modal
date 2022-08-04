@@ -1,4 +1,4 @@
-import { FeaturedSnippetDirectAnswer } from "@yext/answers-headless-react";
+import { FeaturedSnippetDirectAnswer } from "@yext/search-headless-react";
 import { FeaturedSnippet } from "./types";
 
 

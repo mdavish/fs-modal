@@ -9,8 +9,9 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.5.0",
-    "@yext/answers-headless-react": "^1.1.0-beta.7",
-    "@yext/answers-react-components": "^0.1.0-beta.8",
+    "@yext/analytics": "^0.2.0-beta.5",
+    "@yext/search-headless-react": "^1.4.0",
+    "@yext/search-ui-react": "^1.0.0-beta.269",
     "axios": "^0.26.1",
     "easy-peasy": "^5.0.4",
     "react": "^17.0.2",

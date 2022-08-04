@@ -19,6 +19,7 @@ function App() {
 
   const answers = useAnswersActions();
   const setOriginalSnippet = useStoreActions((a) => a.setOriginalSnippet);
+  const setUpdatedSnippet = useStoreActions((a) => a.setUpdatedSnippet);
   const setSelectedEntity = useStoreActions((a) => a.setSelectedEntity);
   answers.addListener<ListenerType>({
     valueAccessor: (state => {
@@ -31,6 +32,7 @@ function App() {
       if (directAnswer) {
         const reformattedAnswer = directAnswerToFS(directAnswer);
         setOriginalSnippet(reformattedAnswer);
+        setUpdatedSnippet(undefined);
         setSelectedEntity({
           id: directAnswer.relatedResult.id as string,
           name: directAnswer.relatedResult.name as string,

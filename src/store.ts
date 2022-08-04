@@ -12,8 +12,8 @@ interface StoreModel {
   originalSnippet?: FeaturedSnippet;
   updatedSnippet?: FeaturedSnippet;
   displaySnippet: Computed<StoreModel, FeaturedSnippet | undefined, StoreModel>;
-  setOriginalSnippet: Action<StoreModel, FeaturedSnippet>;
-  setUpdatedSnippet: Action<StoreModel, FeaturedSnippet>;
+  setOriginalSnippet: Action<StoreModel, FeaturedSnippet | undefined>;
+  setUpdatedSnippet: Action<StoreModel, FeaturedSnippet | undefined>;
   status: Computed<StoreModel, "UNEDITED" | "MODIFIED" | "APPROVED" | "REJECTED">;
   showFSModal: boolean;
   setShowFSModal: Action<StoreModel, boolean>;

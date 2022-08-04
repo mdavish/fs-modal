@@ -60,7 +60,7 @@ const InteractiveText: React.FC<InteractiveTextProps> = ({
           (!loading && entityData) ?
             <div className='p-4 leading-5 text-gray-800'>
               {
-                (displaySnippet !== undefined) ?
+                (displaySnippet?.entity.id === entityId) ?
                   <HighlightedText
                     offset={updatedOffset}
                     length={displaySnippet.length}

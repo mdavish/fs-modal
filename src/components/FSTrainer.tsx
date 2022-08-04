@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAnswersState } from '@yext/answers-headless-react';
 import { IoColorWand } from "react-icons/io5";
 import FSModal from './FSModal';
 import FeaturedSnippet from './FeaturedSnippet';
-import { useStoreActions } from "./../store";
+import { useStoreState, useStoreActions } from "./../store";
 
 
 const FSTrainer: React.FC = () => {
 
-  const directAnswer = useAnswersState(s => s.directAnswer);
   const isLoading = useAnswersState(s => s.searchStatus.isLoading);
   const mostRecentSearch = useAnswersState(s => s.query.mostRecentSearch);
   const setShowFSModal = useStoreActions(a => a.setShowFSModal);
+  const displaySnippet = useStoreState(s => s.displaySnippet);
 
   if (isLoading || !mostRecentSearch) {
     return <></>
@@ -20,7 +20,7 @@ const FSTrainer: React.FC = () => {
   return (
     <>
       {
-        directAnswer.result ?
+        displaySnippet ?
           <FeaturedSnippet /> :
           <div className="bg-blue-100 border border-blue-200 p-4 rounded-lg grid">
             <button

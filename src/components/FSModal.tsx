@@ -4,6 +4,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import DropDown from "./DropDown";
 import InteractiveText from "./InteractiveText";
 import { useStoreState, useStoreActions } from "./../store";
+import ReactMarkdown from "react-markdown";
 
 
 const FSModal: React.FC = () => {
@@ -52,12 +53,15 @@ const FSModal: React.FC = () => {
           <div className="w-1/2 pl-3 flex flex-col gap-y-6">
             <div className="w-full mt-3">
               <h3 className="text-gray-600 mb-2">Algorithm's Answer</h3>
-              <div className="mt-2 w-full p-2 border border-gray-300 rounded-md">
+              <div className="mt-2 w-full p-2 border border-gray-300 rounded-md list-disc max-h-72 overflow-auto">
                 {
                   originalSnippet ?
                     <div>
-                      <h3 className="">{originalSnippet.value}</h3>
-                      <p className="pt-2 text-sm"> From <span className="text-blue-800">{originalSnippet.entity.name}</span></p>
+                      <ReactMarkdown className="prose-sm prose-slate">
+                        {originalSnippet.value || ""}
+                      </ReactMarkdown>
+                      <p className="pt-2 text-sm"> From <span className="text-blue-800">
+                        {originalSnippet.entity.name}</span></p>
                     </div> : <div className="uppercase text-gray-600">No Answer</div>
                 }
               </div>

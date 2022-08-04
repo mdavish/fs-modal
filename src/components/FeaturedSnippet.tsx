@@ -1,6 +1,7 @@
 import React from 'react';
 import { IoColorWand } from "react-icons/io5";
 import { useStoreState, useStoreActions } from "./../store";
+import ReactMarkdown from "react-markdown";
 
 const FeaturedSnippet: React.FC = () => {
 
@@ -38,10 +39,12 @@ const FeaturedSnippet: React.FC = () => {
       <div className='bg-white p-4 border border-gray-200 rounded-md'>
         {displaySnippet?.resultText &&
           <div className='text-gray-800 text-lg font-medium'>
-            {displaySnippet.value}
+            <ReactMarkdown className="prose-sm prose-slate font-light">
+              {displaySnippet.value || ""}
+            </ReactMarkdown>
           </div>}
-        <div className='mt-2 text-sm'>
-          {displaySnippet.resultText}
+        <div className="font-light">
+          From <a href="#" className="font-medium text-blue-600 hover:underline">{displaySnippet.entity.name}</a>
         </div>
       </div>
     </div>

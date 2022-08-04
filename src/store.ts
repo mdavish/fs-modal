@@ -31,10 +31,6 @@ export const store = createStore<StoreModel>({
     const displaySnip = updatedSnippet ?? originalSnippet;
     if (displaySnip !== undefined) {
       return {
-        value: displaySnip.resultText.slice(
-          displaySnip.offset,
-          displaySnip.offset + displaySnip.length
-        ),
         ...displaySnip,
       }
     } else {

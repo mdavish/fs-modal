@@ -5,8 +5,20 @@ import {
   createTypedHooks,
   computed,
   Computed,
+  thunk,
+  Thunk
 } from 'easy-peasy';
+import axios from "axios";
 import { FeaturedSnippet } from "./types";
+
+interface EntityResponse {
+  meta: {
+    id: string
+  };
+  response: {
+    body: string;
+  }
+}
 
 interface StoreModel {
   originalSnippet?: FeaturedSnippet;
@@ -19,6 +31,12 @@ interface StoreModel {
   setShowFSModal: Action<StoreModel, boolean>;
   selectedEntity?: { name: string, id: string };
   setSelectedEntity: Action<StoreModel, { name: string, id: string }>;
+  entityFetchError: boolean;
+  entityFetchLoading: boolean;
+  setEntityFetchError: Action<StoreModel, boolean>;
+  selectedEntityData?: EntityResponse;
+  setEntityData: Action<StoreModel, EntityResponse>;
+  getEntityData: Thunk<StoreModel, string, EntityResponse>;
 }
 
 export const store = createStore<StoreModel>({
@@ -64,6 +82,27 @@ export const store = createStore<StoreModel>({
   }),
   setSelectedEntity: action((state, entity) => {
     state.selectedEntity = entity;
+  }),
+  entityFetchLoading: false,
+  entityFetchError: false,
+  setEntityFetchError: action((state, error) => {
+    state.entityFetchError = error;
+  }),
+  setEntityData: action((state, data) => {
+    state.selectedEntityData = data;
+  }),
+  getEntityData: thunk(async (actions, entityId) => {
+    console.log("Bout to thunk");
+    const params = {
+      api_key: '1c81e4de0ec0e8051bdf66c31fc26a45',
+      v: '20220101'
+    }
+    try {
+      const response = await axios.get<EntityResponse>(`https://liveapi.yext.com/v2/accounts/me/entities/${entityId}`, { params })
+      actions.setEntityData(response.data);
+    } catch {
+      actions.setEntityFetchError(true);
+    }
   }),
 })
 

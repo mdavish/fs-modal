@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     './src/**/*.{js,jsx,ts,tsx}',
@@ -5,7 +6,20 @@ module.exports = {
     './node_modules/@yext/search-ui-react/lib/**/*.js'
   ],
   theme: {
-    extend: {},
+    extend: {
+      typography: ({ theme }) => ({
+        sm: {
+          css: {
+            fontSize: '0.75rem',
+          }
+        },
+        xs: {
+          css: {
+            fontSize: '0.75rem',
+          }
+        }
+      })
+    },
   },
   variants: {
     extend: {},

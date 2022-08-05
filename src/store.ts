@@ -20,6 +20,8 @@ interface EntityResponse {
   }
 }
 
+type SegmentedBody = string[];
+
 interface StoreModel {
   originalSnippet?: FeaturedSnippet;
   updatedSnippet?: FeaturedSnippet;
@@ -37,6 +39,12 @@ interface StoreModel {
   selectedEntityData?: EntityResponse;
   setEntityData: Action<StoreModel, EntityResponse>;
   getEntityData: Thunk<StoreModel, string, EntityResponse>;
+  segmentedBody: Computed<StoreModel, SegmentedBody | undefined>;
+  selectedParagraphs?: number[];
+  selectParagraph: Action<StoreModel, number>;
+  unselectParagraph: Action<StoreModel, number>;
+  clearSelectedParagraphs: Action<StoreModel>;
+  toggleParagraphSelection: Action<StoreModel, number>;
 }
 
 export const store = createStore<StoreModel>({
@@ -92,7 +100,6 @@ export const store = createStore<StoreModel>({
     state.selectedEntityData = data;
   }),
   getEntityData: thunk(async (actions, entityId) => {
-    console.log("Bout to thunk");
     const params = {
       api_key: '1c81e4de0ec0e8051bdf66c31fc26a45',
       v: '20220101'
@@ -102,6 +109,39 @@ export const store = createStore<StoreModel>({
       actions.setEntityData(response.data);
     } catch {
       actions.setEntityFetchError(true);
+    }
+  }),
+  segmentedBody: computed([s => s.selectedEntityData], entityData => {
+    if (entityData) {
+      const body = entityData.response.body;
+      const segments = body.split("\n").filter(s => s.length > 0);
+      return segments;
+    } else {
+      return undefined;
+    }
+  }),
+  clearSelectedParagraphs: action((state) => {
+    state.selectedParagraphs = undefined;
+  }),
+  unselectParagraph: action((state, paragraphNumber) => {
+    if (state.selectedParagraphs) {
+      state.selectedParagraphs = state.selectedParagraphs.filter(p => p !== paragraphNumber);
+    }
+  }),
+  selectParagraph: action((state, paragraphNumber) => {
+    if (state.selectedParagraphs) {
+      state.selectedParagraphs.push(paragraphNumber);
+    } else {
+      state.selectedParagraphs = [paragraphNumber];
+    }
+  }),
+  toggleParagraphSelection: action((state, paragraphNumber) => {
+    if (state.selectedParagraphs && state.selectedParagraphs.includes(paragraphNumber)) {
+      state.selectedParagraphs = state.selectedParagraphs.filter(p => p !== paragraphNumber);
+    } else if (state.selectedParagraphs && !state.selectedParagraphs.includes(paragraphNumber)) {
+      state.selectedParagraphs.push(paragraphNumber);
+    } else {
+      state.selectedParagraphs = [paragraphNumber];
     }
   }),
 })

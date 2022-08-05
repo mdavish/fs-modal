@@ -17,8 +17,6 @@ export function findUpdatedOffset(
 
 export const directAnswerToFS = (directAnswer: FeaturedSnippetDirectAnswer): FeaturedSnippet => {
   if (directAnswer.fieldType === "rich_text") {
-    console.log("Converting a rich text guy")
-    console.log(directAnswer)
     return {
       entity: {
         id: directAnswer.relatedResult.id as string,
@@ -44,5 +42,15 @@ export const directAnswerToFS = (directAnswer: FeaturedSnippetDirectAnswer): Fea
     }
   } else {
     throw new Error("Unknown field type");
+  }
+}
+
+export const canSelectParagraph = (index: number, selectedParagraphs: number[] | undefined) => {
+  if (!selectedParagraphs) {
+    return true;
+  } else {
+    const firstSelection = Math.min(...selectedParagraphs);
+    const lastSelection = Math.max(...selectedParagraphs);
+    return (index === firstSelection - 1 || index === lastSelection + 1) || (index > firstSelection && index < lastSelection);
   }
 }

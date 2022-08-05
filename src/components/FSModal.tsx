@@ -1,5 +1,5 @@
 import { Dialog } from "@headlessui/react";
-import { useSearchState, Result, useSearchActions } from "@yext/search-headless-react";
+import { useSearchState, Result } from "@yext/search-headless-react";
 import { AiOutlineSearch } from "react-icons/ai";
 import DropDown from "./DropDown";
 import InteractiveText from "./InteractiveText";
@@ -22,7 +22,6 @@ const FSModal: React.FC = () => {
     id: result.id as string,
     displayKey: result.name as string,
   }))
-  // TODO Select based on featured snippet.
   return (
     <Dialog
       className="fixed z-10 inset-0 overflow-y-auto"
@@ -48,7 +47,7 @@ const FSModal: React.FC = () => {
           onChange={(option) => setSelectedEntity({ id: option.id, name: option.displayKey })} />
         <div className="flex flex-row">
           <div className="w-1/2 pr-3">
-            <InteractiveText entityId={selectedEntity.id} />
+            <InteractiveText />
           </div>
           <div className="w-1/2 pl-3 flex flex-col gap-y-6">
             <div className="w-full mt-3">

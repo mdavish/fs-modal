@@ -10,6 +10,7 @@ import {
 } from 'easy-peasy';
 import axios from "axios";
 import { FeaturedSnippet } from "./types";
+import { findSelectedParagraphs, segmentRichText } from "./utils";
 
 interface EntityResponse {
   meta: {
@@ -24,10 +25,9 @@ type SegmentedBody = string[];
 
 interface StoreModel {
   originalSnippet?: FeaturedSnippet;
-  updatedSnippet?: FeaturedSnippet;
+  updatedSnippet: Computed<StoreModel, FeaturedSnippet | undefined>;
   displaySnippet: Computed<StoreModel, FeaturedSnippet | undefined, StoreModel>;
   setOriginalSnippet: Action<StoreModel, FeaturedSnippet | undefined>;
-  setUpdatedSnippet: Action<StoreModel, FeaturedSnippet | undefined>;
   status: Computed<StoreModel, "UNEDITED" | "MODIFIED" | "APPROVED" | "REJECTED">;
   showFSModal: boolean;
   setShowFSModal: Action<StoreModel, boolean>;
@@ -41,6 +41,7 @@ interface StoreModel {
   getEntityData: Thunk<StoreModel, string, EntityResponse>;
   segmentedBody: Computed<StoreModel, SegmentedBody | undefined>;
   selectedParagraphs?: number[];
+  setSelectedParagraphs: Action<StoreModel, number[]>;
   selectParagraph: Action<StoreModel, number>;
   unselectParagraph: Action<StoreModel, number>;
   clearSelectedParagraphs: Action<StoreModel>;
@@ -49,7 +50,26 @@ interface StoreModel {
 
 export const store = createStore<StoreModel>({
   originalSnippet: undefined,
-  updatedSnippet: undefined,
+  updatedSnippet: computed((state) => {
+    if (state.selectedParagraphs && state.segmentedBody) {
+      const orderedParagraphs = state.selectedParagraphs.sort((a, b) => a - b);
+      // @ts-ignore
+      const paragraphs: string[] = orderedParagraphs.map(paragraph => state.segmentedBody[paragraph]);
+      const value = paragraphs.join("\n");
+      const newSnippet: FeaturedSnippet = {
+        fieldType: "rich_text",
+        value: value,
+        entity: {
+          id: state.selectedEntity?.id ?? "",
+          name: state.selectedEntity?.name ?? "",
+        },
+        resultText: ""
+      }
+      return newSnippet;
+    } else {
+      return undefined;
+    }
+  }),
   displaySnippet: computed([
     s => s.originalSnippet,
     s => s.updatedSnippet
@@ -65,9 +85,6 @@ export const store = createStore<StoreModel>({
   }),
   setOriginalSnippet: action((state, snippet) => {
     state.originalSnippet = snippet;
-  }),
-  setUpdatedSnippet: action((state, snippet) => {
-    state.updatedSnippet = snippet;
   }),
   status: computed([
     s => s.originalSnippet,
@@ -99,7 +116,7 @@ export const store = createStore<StoreModel>({
   setEntityData: action((state, data) => {
     state.selectedEntityData = data;
   }),
-  getEntityData: thunk(async (actions, entityId) => {
+  getEntityData: thunk(async (actions, entityId, helpers) => {
     const params = {
       api_key: '1c81e4de0ec0e8051bdf66c31fc26a45',
       v: '20220101'
@@ -107,6 +124,21 @@ export const store = createStore<StoreModel>({
     try {
       const response = await axios.get<EntityResponse>(`https://liveapi.yext.com/v2/accounts/me/entities/${entityId}`, { params })
       actions.setEntityData(response.data);
+      const state = helpers.getState();
+      const { originalSnippet } = state;
+      // If there is a Rich Text direct answer, then we need to compute which 
+      // paragraphs it corresponds to in the entity, so we can highlight those paragraphs
+      if (originalSnippet && originalSnippet.fieldType === "rich_text") {
+        const selectedParagraphs = findSelectedParagraphs(
+          response.data.response.body,
+          originalSnippet.value
+        )
+        // Once computed, we set those paragraphs as the original selection
+        actions.setSelectedParagraphs(selectedParagraphs);
+      } else {
+        // TODO: Infer the offset/length of the entity from the response
+        console.warn("Have not implemented multiline text offset finding yet.")
+      }
     } catch {
       actions.setEntityFetchError(true);
     }
@@ -114,11 +146,13 @@ export const store = createStore<StoreModel>({
   segmentedBody: computed([s => s.selectedEntityData], entityData => {
     if (entityData) {
       const body = entityData.response.body;
-      const segments = body.split("\n").filter(s => s.length > 0);
-      return segments;
+      return segmentRichText(body);
     } else {
       return undefined;
     }
+  }),
+  setSelectedParagraphs: action((state, paragraphs) => {
+    state.selectedParagraphs = paragraphs;
   }),
   clearSelectedParagraphs: action((state) => {
     state.selectedParagraphs = undefined;

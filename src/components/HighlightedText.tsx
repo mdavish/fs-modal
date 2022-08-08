@@ -13,27 +13,28 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
   length,
 }) => {
 
-  const setUpdatedSnippet = useStoreActions(a => a.setUpdatedSnippet);
   const selectedEntity = useStoreState(s => s.selectedEntity);
-  const handleSelection: ReactEventHandler<HTMLDivElement> = () => {
-    const selection = window.getSelection();
-    if (selection) {
-      const offset = selection?.anchorOffset;
-      const length = selection?.toString().length;
-      setUpdatedSnippet({
-        entity: {
-          id: selectedEntity?.id as string,
-          name: selectedEntity?.name as string,
-        },
-        offset,
-        length,
-        resultText: text.slice(Math.max(offset - 250, 0), offset + length + 250),
-      });
-    }
-  }
+  // const handleSelection: ReactEventHandler<HTMLDivElement> = () => {
+  //   const selection = window.getSelection();
+  //   if (selection) {
+  //     const offset = selection?.anchorOffset;
+  //     const length = selection?.toString().length;
+  //     setUpdatedSnippet({
+  //       entity: {
+  //         id: selectedEntity?.id as string,
+  //         name: selectedEntity?.name as string,
+  //       },
+  //       offset,
+  //       length,
+  //       resultText: text.slice(Math.max(offset - 250, 0), offset + length + 250),
+  //     });
+  //   }
+  // }
 
   return (
-    <div onMouseUp={handleSelection}>
+    <div
+    // onMouseUp={handleSelection}
+    >
       {
         (offset && length) ?
           <>

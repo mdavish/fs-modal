@@ -1,10 +1,4 @@
-import {
-  SearchBar,
-  UniversalResults,
-  StandardCard,
-  VerticalResults,
-  StandardSection,
-} from "@yext/search-ui-react";
+import { SearchBar, UniversalResults, } from "@yext/search-ui-react";
 import FSTrainer from "./components/FSTrainer";
 import {
   FeaturedSnippetDirectAnswer,
@@ -23,8 +17,8 @@ function App() {
 
   const searchActions = useSearchActions();
   const setOriginalSnippet = useStoreActions((a) => a.setOriginalSnippet);
-  const setUpdatedSnippet = useStoreActions((a) => a.setUpdatedSnippet);
   const setSelectedEntity = useStoreActions((a) => a.setSelectedEntity);
+
   searchActions.addListener<ListenerType>({
     valueAccessor: (state => {
       return {
@@ -36,7 +30,6 @@ function App() {
       if (directAnswer) {
         const reformattedAnswer = directAnswerToFS(directAnswer);
         setOriginalSnippet(reformattedAnswer);
-        setUpdatedSnippet(undefined);
         setSelectedEntity({
           id: directAnswer.relatedResult.id as string,
           name: directAnswer.relatedResult.name as string,
@@ -61,9 +54,7 @@ function App() {
             customCssClasses={{
               universalResultsContainer: "mt-10"
             }}
-            verticalConfigMap={{
-
-            }} />
+            verticalConfigMap={{}} />
         </div>
       </div>
     </div >

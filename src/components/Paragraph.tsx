@@ -8,7 +8,7 @@ interface ParagraphProps {
   selected?: boolean;
   index: number;
   onSelect: (index: number) => void;
-  selectionDisabled: boolean;
+  // selectionDisabled: boolean;
 }
 
 const Paragraph: React.FC<ParagraphProps> = ({
@@ -16,14 +16,16 @@ const Paragraph: React.FC<ParagraphProps> = ({
   selected,
   index,
   onSelect,
-  selectionDisabled,
+  // selectionDisabled,
 }) => {
   const [hovering, isHovering] = useState(false);
+  // Getting rid of disabling logic for now.
+  // selectionDisabled = false;
   return (
     <div className="flex flex-row">
       <div className="grid group">
         <button
-          disabled={selectionDisabled}
+          // disabled={selectionDisabled}
           onMouseEnter={() => isHovering(true)}
           onMouseLeave={() => isHovering(false)}
           onClick={() => onSelect(index)}
@@ -31,7 +33,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
         >
           <BsParagraph className={cx(
             "my-auto mx-auto mr-2",
-            (selectionDisabled && !selected) ? "text-gray-300" : "text-gray-500",
+            // (selectionDisabled && !selected) ? "text-gray-300" : "text-gray-500",
             selected && "text-blue-800",
           )} />
         </button>

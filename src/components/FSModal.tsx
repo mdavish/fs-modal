@@ -72,7 +72,9 @@ const FSModal: React.FC = () => {
                   {
                     displaySnippet ?
                       <div>
-                        <h3 className="">{displaySnippet.value}</h3>
+                        <ReactMarkdown className="prose-sm prose-slate">
+                          {displaySnippet.value || ""}
+                        </ReactMarkdown>
                         <p className="pt-2 text-sm"> From <span className="text-blue-800">{displaySnippet.entity.name}</span></p>
                       </div> : <div className="uppercase text-gray-600">No Answer</div>
                   }

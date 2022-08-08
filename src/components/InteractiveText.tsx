@@ -33,7 +33,6 @@ const InteractiveText = (): JSX.Element => {
                   selected={selectedParagraphs && selectedParagraphs.includes(index)}
                   onSelect={(index) => { toggleParagraphSelection(index) }}
                   index={index}
-                  selectionDisabled={!canSelectParagraph(index, selectedParagraphs)}
                 >
                   {segment}
                 </Paragraph>

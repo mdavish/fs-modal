@@ -11,13 +11,9 @@ module.exports = {
         sm: {
           css: {
             fontSize: '0.75rem',
+            lineHeight: '1.0rem'
           }
         },
-        xs: {
-          css: {
-            fontSize: '0.75rem',
-          }
-        }
       })
     },
   },

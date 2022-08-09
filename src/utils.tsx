@@ -84,14 +84,3 @@ export const directAnswerToFS = (directAnswer: FeaturedSnippetDirectAnswer): Fea
     throw new Error("Unknown field type");
   }
 }
-
-//TODO: Deprecate this
-export const canSelectParagraph = (index: number, selectedParagraphs: number[] | undefined) => {
-  if (!selectedParagraphs) {
-    return true;
-  } else {
-    const firstSelection = Math.min(...selectedParagraphs);
-    const lastSelection = Math.max(...selectedParagraphs);
-    return index >= firstSelection - 1 && index <= lastSelection + 1;
-  }
-}

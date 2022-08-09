@@ -24,11 +24,11 @@ const FSModal: React.FC = () => {
   }))
   return (
     <Dialog
-      className="fixed z-10 inset-0 overflow-y-auto"
+      className="fixed z-10 inset-0 overflow-y-auto h-screen grid"
       open={showFSModal}
       onClose={setShowFSModal}>
       <Dialog.Overlay className="fixed w-full h-full grid items-center inset-0 bg-black/20 backdrop-blur-sm" />
-      <div className="p-6 relative z-40 mx-auto my-24 bg-white w-2/3 lg:w-1/2 rounded-md">
+      <div className="p-6 relative z-40 mx-auto my-auto bg-white w-3/4 rounded-md h-5/6 overflow-auto">
         <div className="pb-2 border-b border-gray-200">
           <Dialog.Title className="text-xl text-gray-700 font-medium">
             Train Featured Snippets
@@ -52,7 +52,7 @@ const FSModal: React.FC = () => {
           <div className="w-1/2 pl-3 flex flex-col gap-y-6">
             <div className="w-full mt-3">
               <h3 className="text-gray-600 mb-2">Algorithm's Answer</h3>
-              <div className="mt-2 w-full p-2 border border-gray-300 rounded-md list-disc max-h-72 overflow-auto">
+              <div className="mt-2 w-full p-2 border border-gray-300 rounded-md list-disc max-h-56 overflow-auto">
                 {
                   originalSnippet ?
                     <div>
@@ -68,7 +68,7 @@ const FSModal: React.FC = () => {
             {(status !== "UNEDITED") &&
               <div className="w-full">
                 <h3 className="text-gray-600 mb-2">Updated Answer</h3>
-                <div className="w-full p-2 border border-gray-300 rounded-md">
+                <div className="w-full p-2 border border-gray-300 rounded-md max-h-56 overflow-auto">
                   {
                     displaySnippet ?
                       <div>
@@ -83,10 +83,10 @@ const FSModal: React.FC = () => {
             }
           </div>
         </div>
-        <div className="mt-2 w-full flex flex-row">
-          <div className="flex flex-row ml-auto gap-x-4 items-center">
-            <button onClick={() => setShowFSModal(false)} className="text-blue-900">Cancel</button>
-            <button onClick={() => setShowFSModal(false)} className="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-md">Save</button>
+        <div className="border-gray-200 sticky mt-2 w-full flex flex-row">
+          <div className="flex flex-row ml-auto gap-x-4 items-center h-ful ">
+            <button onClick={() => setShowFSModal(false)} className="my-auto text-blue-900">Cancel</button>
+            <button onClick={() => setShowFSModal(false)} className="my-auto bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-md">Save</button>
           </div>
         </div>
       </div>

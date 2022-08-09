@@ -164,17 +164,60 @@ export const store = createStore<StoreModel>({
   }),
   selectParagraph: action((state, paragraphNumber) => {
     if (state.selectedParagraphs) {
-      state.selectedParagraphs.push(paragraphNumber);
+      // If the new paragraph is NOT adjacent, clear the selection
+      const firstSelection = Math.min(...state.selectedParagraphs);
+      const lastSelection = Math.max(...state.selectedParagraphs);
+      const isAdjacent = paragraphNumber >= firstSelection - 1 && paragraphNumber <= lastSelection + 1;
+      console.log({
+        firstSelection,
+        lastSelection,
+        isAdjacent,
+        selectedParagraphs: state.selectedParagraphs,
+      })
+      if (!isAdjacent) {
+        state.selectedParagraphs = [paragraphNumber];
+      } else {
+        state.selectedParagraphs.push(paragraphNumber);
+      }
     } else {
       state.selectedParagraphs = [paragraphNumber];
     }
   }),
   toggleParagraphSelection: action((state, paragraphNumber) => {
-    if (state.selectedParagraphs && state.selectedParagraphs.includes(paragraphNumber)) {
+
+    let firstSelection: number;
+    let lastSelection: number;
+    let isAdjacent: boolean | undefined = undefined;
+
+    if (state.selectedParagraphs) {
+      firstSelection = Math.min(...state.selectedParagraphs);
+      lastSelection = Math.max(...state.selectedParagraphs);
+      isAdjacent = paragraphNumber >= firstSelection - 1 && paragraphNumber <= lastSelection + 1;
+    }
+
+
+    // If the paragraph is already selected, unselect it
+    if (
+      state.selectedParagraphs &&
+      state.selectedParagraphs.includes(paragraphNumber)
+    ) {
       state.selectedParagraphs = state.selectedParagraphs.filter(p => p !== paragraphNumber);
-    } else if (state.selectedParagraphs && !state.selectedParagraphs.includes(paragraphNumber)) {
+    }
+    // If the paragraph isn't selected but is adjacent to the selection, select it
+    else if (
+      state.selectedParagraphs &&
+      !state.selectedParagraphs.includes(paragraphNumber) &&
+      isAdjacent
+    ) {
       state.selectedParagraphs.push(paragraphNumber);
+    } else if (
+      state.selectedParagraphs &&
+      !state.selectedParagraphs.includes(paragraphNumber) &&
+      !isAdjacent
+    ) {
+      state.selectedParagraphs = [paragraphNumber];
     } else {
+      console.warn("Something is wrong...");
       state.selectedParagraphs = [paragraphNumber];
     }
   }),

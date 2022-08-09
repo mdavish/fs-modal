@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useStoreState, useStoreActions } from "./../store";
 import Paragraph from "./Paragraph";
-import { canSelectParagraph } from "../utils";
 
 const InteractiveText = (): JSX.Element => {
 
@@ -14,6 +13,13 @@ const InteractiveText = (): JSX.Element => {
   const selectedParagraphs = useStoreState(s => s.selectedParagraphs);
   const toggleParagraphSelection = useStoreActions(a => a.toggleParagraphSelection);
 
+  let firstSelection: number;
+  let lastSelection: number;
+  if (selectedParagraphs) {
+    firstSelection = Math.min(...selectedParagraphs);
+    lastSelection = Math.max(...selectedParagraphs);
+  }
+
   useEffect(() => {
     getEntityData(selectedEntity?.id || "");
   }, [selectedEntity])
@@ -22,7 +28,7 @@ const InteractiveText = (): JSX.Element => {
   return (
     <div className="mt-3">
       <h3 className="mb-3 text-gray-700 flex flex-roq">Snippet <span className=" text-xs text-gray-500 my-auto ml-4">Highlight text to revise the snippet</span></h3>
-      <div className=" shadow-inner bg-gray-50 border border-gray-300 text-xs max-h-72 overflow-auto rounded-lg">
+      <div className=" shadow-inner bg-gray-50 border border-gray-300 text-xs h-full overflow-auto rounded-lg max-h-96">
         {
           (!entityFetchLoading && !entityFetchError && selectedEntityData && segmentedBody) &&
           <div className='p-4 leading-5 text-gray-800'>
@@ -33,6 +39,8 @@ const InteractiveText = (): JSX.Element => {
                   selected={selectedParagraphs && selectedParagraphs.includes(index)}
                   onSelect={(index) => { toggleParagraphSelection(index) }}
                   index={index}
+                  isFirstSelection={firstSelection === index}
+                  isLastSelection={lastSelection === index}
                 >
                   {segment}
                 </Paragraph>

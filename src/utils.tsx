@@ -19,7 +19,26 @@ export function segmentRichText(
   richText: string,
 ): string[] {
   // Eventually we will make this smarter, but it MUST be consistent
-  return richText.split("\n").filter(s => s.length > 0);
+  const splitText = richText.split("\n").filter(s => s.length > 0);
+
+  // Go through each item in splitText and, if the item starts with 
+  // a dash or a number, then consolidate it into the next item
+  // that also starts with a dash or number
+  let consolidated = [];
+  let current = "";
+  for (let i = 0; i < splitText.length; i++) {
+    const item = splitText[i];
+    if (item.startsWith("-") || item.startsWith("1.")) {
+      current += item;
+    } else {
+      if (current.length > 0) {
+        consolidated.push(current);
+        current = "";
+      }
+      consolidated.push(item);
+    }
+  }
+  return consolidated;
 }
 
 export function findSelectedParagraphs(

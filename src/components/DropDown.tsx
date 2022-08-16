@@ -27,7 +27,7 @@ const DropDown: React.FC<DropDownProps> = ({ options, selectedOption, onChange }
                 <span>{selectedOption.displayKey}</span>
                 <FaChevronDown className="text-gray-700 my-auto ml-auto h-5" />
               </Listbox.Button>
-              <Listbox.Options className="absolute py-1 mt-1 w-64 overflow-auto text-sm bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Listbox.Options className="z-40 absolute py-1 mt-1 w-64 overflow-auto text-sm bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none">
                 {options.map((option) => (
                   <Listbox.Option
                     key={option.id} value={option}>

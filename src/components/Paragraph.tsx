@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { BsParagraph } from "react-icons/bs";
 import { MdCancel } from "react-icons/md";
 import cx from "classnames";
-import { useStoreActions } from "./../store"
+import { useStoreActions } from "./../store";
 
 interface ParagraphProps {
   children: string;
@@ -24,6 +24,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
 }) => {
   const [hovering, isHovering] = useState(false);
   const clearSelectedParagraphs = useStoreActions(actions => actions.clearSelectedParagraphs);
+  const handleWordSelection = useStoreActions(actions => actions.handleWordSelection);
   return (
     <div className="flex flex-row">
       <div className="grid group">
@@ -40,6 +41,12 @@ const Paragraph: React.FC<ParagraphProps> = ({
         </button>
       </div>
       <div
+        onMouseUp={() => {
+          const selection = document.getSelection();
+          if (selection) {
+            handleWordSelection(selection);
+          }
+        }}
         className={cx(
           "relative prose-xs transition-all delay-100 p-1 w-full",
           (selected && isFirstSelection) && "rounded-t-md",
@@ -53,7 +60,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
           <button
             onClick={() => clearSelectedParagraphs()}
             className="grid -right-2 -top-2 z-10 absolute rounded-full bg-white" >
-            <MdCancel className="text-2xl my-auto mx-auto text-gray-700 hover:text-gray-900" />
+            <MdCancel className="text-xl my-auto mx-auto text-gray-700 hover:text-gray-900" />
           </button>
         }
         <ReactMarkdown

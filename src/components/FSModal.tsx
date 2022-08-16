@@ -85,8 +85,13 @@ const FSModal: React.FC = () => {
         </div>
         <div className="border-gray-200 sticky mt-2 w-full flex flex-row">
           <div className="flex flex-row ml-auto gap-x-4 items-center h-ful ">
-            <button onClick={() => setShowFSModal(false)} className="my-auto text-blue-900">Cancel</button>
-            <button onClick={() => setShowFSModal(false)} className="my-auto bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-md">Save</button>
+            <button
+              onClick={() => setShowFSModal(false)}
+              className="my-auto text-blue-900">
+              Cancel
+            </button>
+            <button
+              onClick={() => setShowFSModal(false)} className="my-auto bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-md">Save</button>
           </div>
         </div>
       </div>

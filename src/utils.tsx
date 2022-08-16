@@ -103,3 +103,8 @@ export const directAnswerToFS = (directAnswer: FeaturedSnippetDirectAnswer): Fea
     throw new Error("Unknown field type");
   }
 }
+
+
+export function richTextToPlainText(richText: string): string {
+  return richText.replace(/<[^>]*>/g, '');
+}

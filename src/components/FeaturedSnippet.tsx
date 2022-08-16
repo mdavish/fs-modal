@@ -15,13 +15,15 @@ const FeaturedSnippet: React.FC = () => {
 
   return (
     <div className='rounded-md bg-blue-100 border border-blue-600 p-4 focs:outline-none'>
-      {status === "UNEDITED" && <div className='flex flex-row mb-2'>
-        <button
-          onClick={() => setShowFSModal(true)}
-          className='mx-auto my-auto flex flex-row text-blue-600 hover:text-blue-800 focus:ring-none'>
-          <IoColorWand className='my-auto mr-2' /> Train Featured Snippet
-        </button>
-      </div>}
+      {status === "UNEDITED" &&
+        <div className='flex flex-row mb-2'>
+          <button
+            onClick={() => setShowFSModal(true)}
+            className='mx-auto my-auto flex flex-row text-blue-600 hover:text-blue-800 focus:ring-none'>
+            <IoColorWand className='my-auto mr-2' /> Train Featured Snippet
+          </button>
+        </div>
+      }
       {
         status === "MODIFIED" &&
         <div className='flex flex-row'>
@@ -37,7 +39,7 @@ const FeaturedSnippet: React.FC = () => {
         </div>
       }
       <div className='bg-white p-4 border border-gray-200 rounded-md'>
-        {displaySnippet?.resultText &&
+        {displaySnippet?.value &&
           <div className='text-gray-800 text-lg font-medium'>
             <ReactMarkdown className="prose-sm prose-slate font-light">
               {displaySnippet.value || ""}
@@ -47,7 +49,7 @@ const FeaturedSnippet: React.FC = () => {
           From <a href="#" className="font-medium text-blue-600 hover:underline">{displaySnippet.entity.name}</a>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

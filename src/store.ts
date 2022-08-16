@@ -10,7 +10,11 @@ import {
 } from 'easy-peasy';
 import axios from "axios";
 import { FeaturedSnippet } from "./types";
-import { findSelectedParagraphs, segmentRichText } from "./utils";
+import {
+  findSelectedParagraphs,
+  segmentRichText,
+  richTextToPlainText,
+} from "./utils";
 
 interface EntityResponse {
   meta: {
@@ -46,6 +50,10 @@ interface StoreModel {
   unselectParagraph: Action<StoreModel, number>;
   clearSelectedParagraphs: Action<StoreModel>;
   toggleParagraphSelection: Action<StoreModel, number>;
+  plainTextSelection?: string;
+  // Possibly not necessary
+  plainTextBody: Computed<StoreModel, string | undefined>;
+  handleWordSelection: Action<StoreModel, Selection>;
 }
 
 export const store = createStore<StoreModel>({
@@ -66,9 +74,21 @@ export const store = createStore<StoreModel>({
         resultText: ""
       }
       return newSnippet;
+    } else if (state.plainTextSelection) {
+      const newSnippet: FeaturedSnippet = {
+        fieldType: "multi_line_text",
+        value: state.plainTextSelection,
+        entity: {
+          id: state.selectedEntity?.id ?? "",
+          name: state.selectedEntity?.name ?? "",
+        },
+        resultText: ""
+      }
+      return newSnippet;
     } else {
       return undefined;
     }
+
   }),
   displaySnippet: computed([
     s => s.originalSnippet,
@@ -221,6 +241,51 @@ export const store = createStore<StoreModel>({
       state.selectedParagraphs = [paragraphNumber];
     }
   }),
+  plainTextBody: computed([s => s.selectedEntityData], entityData => {
+    if (entityData) {
+      const body = entityData.response.body;
+      return richTextToPlainText(body);
+    } else {
+      return undefined;
+    }
+  }),
+  handleWordSelection: action((state, selection) => {
+
+    if (!selection) {
+      return;
+    }
+    if (!state.selectedEntityData?.response.body) {
+      throw new Error("Selection occurred without entity data.")
+    }
+    if (!state.selectedEntity) {
+      throw new Error("Selection occurred without entity data.")
+    }
+    if (!state.plainTextBody) {
+      throw new Error("Selection occurred without entity data.")
+    }
+
+    // If you select words, you can't select paragraphs
+    state.selectedParagraphs = undefined;
+
+    const plainTextSelection = selection.toString();
+    state.plainTextSelection = plainTextSelection;
+    // Find the offset of the text within the body
+    // NOTE: This may not be necessary in the future
+
+    const offset = state.plainTextBody.indexOf(plainTextSelection);
+    const updatedSnippet = {
+      entity: {
+        id: state.selectedEntity.id,
+        name: state.selectedEntity.name
+      },
+      fieldType: "multi_line_text",
+      offset: offset,
+      length: plainTextSelection.length,
+      value: plainTextSelection,
+      resultText: plainTextSelection,
+    }
+    console.log({ updatedSnippet })
+  })
 })
 
 const typedHooks = createTypedHooks<StoreModel>();

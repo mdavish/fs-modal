@@ -40,8 +40,8 @@ const FeaturedSnippet: React.FC = () => {
       }
       <div className='bg-white p-4 border border-gray-200 rounded-md'>
         {displaySnippet?.value &&
-          <div className='text-gray-800 text-lg font-medium'>
-            <ReactMarkdown className="prose-sm prose-slate font-light">
+          <div className='text-gray-800 text-lg'>
+            <ReactMarkdown className="prose-sm prose-slate">
               {displaySnippet.value || ""}
             </ReactMarkdown>
           </div>}

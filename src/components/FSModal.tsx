@@ -28,62 +28,66 @@ const FSModal: React.FC = () => {
       open={showFSModal}
       onClose={setShowFSModal}>
       <Dialog.Overlay className="fixed w-full h-full grid items-center inset-0 bg-black/20 backdrop-blur-sm" />
-      <div className="p-6 relative z-40 mx-auto my-auto bg-white w-3/4 rounded-md h-5/6 overflow-auto">
-        <div className="pb-2 border-b border-gray-200">
-          <Dialog.Title className="text-xl text-gray-700 font-medium">
-            Train Featured Snippets
-          </Dialog.Title>
-          <Dialog.Description className="text-base text-gray-500">
-            Train the algorithm to get smarter!
-          </Dialog.Description>
-        </div>
-        <div className="ml-auto mb-4 flex flex-row bg-gray-100 text-gray-600 m-4 px-4 py-2 rounded-full">
-          <span className="my-auto mr-4"><AiOutlineSearch /></span>{query.input}
-        </div>
-        <h3 className="text-gray-600">Select an Entity</h3>
-        <DropDown
-          selectedOption={{ displayKey: selectedEntity.name, id: selectedEntity.id }}
-          options={dropdownOptions}
-          onChange={(option) => setSelectedEntity({ id: option.id, name: option.displayKey })} />
-        <div className="flex flex-row">
-          <div className="w-1/2 pr-3">
-            <InteractiveText />
+      <div className="relative z-40 mx-auto my-auto bg-white w-3/4 rounded-md h-5/6 overflow-auto flex flex-col">
+        <div className="border-b border-gray-200 sticky top-0 bg-white">
+          <div className="p-6">
+            <Dialog.Title className="text-xl text-gray-700 font-medium">
+              Train Featured Snippets
+            </Dialog.Title>
+            <Dialog.Description className="text-base text-gray-500">
+              Train the algorithm to get smarter!
+            </Dialog.Description>
           </div>
-          <div className="w-1/2 pl-3 flex flex-col gap-y-6">
-            <div className="w-full mt-3">
-              <h3 className="text-gray-600 mb-2">Algorithm's Answer</h3>
-              <div className="mt-2 w-full p-2 border border-gray-300 rounded-md list-disc max-h-56 overflow-auto">
-                {
-                  originalSnippet ?
-                    <div>
-                      <ReactMarkdown className="prose-sm prose-slate">
-                        {originalSnippet.value || ""}
-                      </ReactMarkdown>
-                      <p className="pt-2 text-sm"> From <span className="text-blue-800">
-                        {originalSnippet.entity.name}</span></p>
-                    </div> : <div className="uppercase text-gray-600">No Answer</div>
-                }
-              </div>
+        </div>
+        <div className="px-6">
+          <div className="ml-auto mb-4 flex flex-row bg-gray-100 text-gray-600 m-4 px-4 py-2 rounded-full">
+            <span className="my-auto mr-4"><AiOutlineSearch /></span>{query.input}
+          </div>
+          <h3 className="text-gray-600">Select an Entity</h3>
+          <DropDown
+            selectedOption={{ displayKey: selectedEntity.name, id: selectedEntity.id }}
+            options={dropdownOptions}
+            onChange={(option) => setSelectedEntity({ id: option.id, name: option.displayKey })} />
+          <div className="flex flex-row">
+            <div className="w-1/2 pr-3">
+              <InteractiveText />
             </div>
-            {(status !== "UNEDITED") &&
-              <div className="w-full">
-                <h3 className="text-gray-600 mb-2">Updated Answer</h3>
-                <div className="w-full p-2 border border-gray-300 rounded-md max-h-56 overflow-auto">
+            <div className="w-1/2 pl-3 flex flex-col gap-y-6">
+              <div className="w-full mt-3">
+                <h3 className="text-gray-600 mb-2">Algorithm's Answer</h3>
+                <div className="mt-2 w-full p-2 border border-gray-300 rounded-md list-disc max-h-56 overflow-auto">
                   {
-                    displaySnippet ?
+                    originalSnippet ?
                       <div>
                         <ReactMarkdown className="prose-sm prose-slate">
-                          {displaySnippet.value || ""}
+                          {originalSnippet.value || ""}
                         </ReactMarkdown>
-                        <p className="pt-2 text-sm"> From <span className="text-blue-800">{displaySnippet.entity.name}</span></p>
+                        <p className="pt-2 text-sm"> From <span className="text-blue-800">
+                          {originalSnippet.entity.name}</span></p>
                       </div> : <div className="uppercase text-gray-600">No Answer</div>
                   }
                 </div>
               </div>
-            }
+              {(status !== "UNEDITED") &&
+                <div className="w-full">
+                  <h3 className="text-gray-600 mb-2">Updated Answer</h3>
+                  <div className="mt-2 w-full p-2 border border-gray-300 rounded-md list-disc max-h-56 overflow-auto">
+                    {
+                      displaySnippet ?
+                        <div>
+                          <ReactMarkdown className="prose-sm prose-slate">
+                            {displaySnippet.value || ""}
+                          </ReactMarkdown>
+                          <p className="pt-2 text-sm"> From <span className="text-blue-800">{displaySnippet.entity.name}</span></p>
+                        </div> : <div className="uppercase text-gray-600">No Answer</div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
           </div>
         </div>
-        <div className="border-gray-200 sticky mt-2 w-full flex flex-row">
+        <div className="mt-auto border-gray-200 bg-white py-4 px-6 border-t sticky bottom-0 w-full flex flex-row">
           <div className="flex flex-row ml-auto gap-x-4 items-center h-ful ">
             <button
               onClick={() => setShowFSModal(false)}

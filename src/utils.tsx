@@ -105,6 +105,6 @@ export const directAnswerToFS = (directAnswer: FeaturedSnippetDirectAnswer): Fea
 }
 
 
-export function richTextToPlainText(richText: string): string {
-  return richText.replace(/<[^>]*>/g, '');
+export function markdownToPlainText(richText: string): string {
+  return richText.replace(/\[(.*?)\]\((.*?)\)/g, "$1").replace(/\*\*(.*?)\*\*/g, "$1").replace(/\*(.*?)\*/g, "$1").replace(/__(.*?)__/g, "$1").replace(/_(.*?)_/g, "$1").replace(/\n/g, " ");
 }

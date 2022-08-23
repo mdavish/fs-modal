@@ -63,7 +63,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
               event.preventDefault();
               clearSelectedParagraphs()
             }}
-            className="grid -right-2 -top-2 z-50 absolute rounded-full bg-white" >
+            className="grid -right-2 -top-2 z-30 absolute rounded-full bg-white" >
             <MdCancel className="text-xl my-auto mx-auto text-gray-700 hover:text-gray-900" />
           </button>
         }

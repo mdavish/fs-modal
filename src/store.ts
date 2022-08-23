@@ -13,7 +13,7 @@ import { FeaturedSnippet } from "./types";
 import {
   findSelectedParagraphs,
   segmentRichText,
-  richTextToPlainText,
+  markdownToPlainText,
 } from "./utils";
 
 interface EntityResponse {
@@ -51,9 +51,10 @@ interface StoreModel {
   clearSelectedParagraphs: Action<StoreModel>;
   toggleParagraphSelection: Action<StoreModel, number>;
   plainTextSelection?: string;
-  // Possibly not necessary
   plainTextBody: Computed<StoreModel, string | undefined>;
   handleWordSelection: Action<StoreModel, Selection>;
+  editingRichText: boolean;
+  setEditingRichText: Action<StoreModel, boolean>;
 }
 
 export const store = createStore<StoreModel>({
@@ -244,7 +245,7 @@ export const store = createStore<StoreModel>({
   plainTextBody: computed([s => s.selectedEntityData], entityData => {
     if (entityData) {
       const body = entityData.response.body;
-      return richTextToPlainText(body);
+      return markdownToPlainText(body);
     } else {
       return undefined;
     }
@@ -284,8 +285,11 @@ export const store = createStore<StoreModel>({
       value: plainTextSelection,
       resultText: plainTextSelection,
     }
-    console.log({ updatedSnippet })
-  })
+  }),
+  editingRichText: false,
+  setEditingRichText: action((state, editingRichText) => {
+    state.editingRichText = editingRichText;
+  }),
 })
 
 const typedHooks = createTypedHooks<StoreModel>();

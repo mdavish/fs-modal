@@ -104,7 +104,15 @@ export const directAnswerToFS = (directAnswer: FeaturedSnippetDirectAnswer): Fea
   }
 }
 
-
 export function markdownToPlainText(richText: string): string {
-  return richText.replace(/\[(.*?)\]\((.*?)\)/g, "$1").replace(/\*\*(.*?)\*\*/g, "$1").replace(/\*(.*?)\*/g, "$1").replace(/__(.*?)__/g, "$1").replace(/_(.*?)_/g, "$1").replace(/\n/g, " ");
+  return richText
+    .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
+    .replace(/\*\*(.*?)\*\*/g, "$1")
+    .replace(/\*(.*?)\*/g, "$1")
+    .replace(/__(.*?)__/g, "$1")
+    .replace(/_(.*?)_/g, "$1")
+}
+
+export const tokenizePlainText = (plainText: string): string[] => {
+  return plainText.split(/\s+/);
 }

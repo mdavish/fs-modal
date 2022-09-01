@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useStoreState, useStoreActions } from "./../store";
 import Paragraph from "./Paragraph";
 import { Switch } from "@headlessui/react";
+import InteractiveTokens from "./InteractiveTokens";
 
 const InteractiveText = (): JSX.Element => {
 
@@ -16,9 +17,6 @@ const InteractiveText = (): JSX.Element => {
   const setEntityFetchError = useStoreActions(a => a.setEntityFetchError);
   const editingRichText = useStoreState(s => s.editingRichText);
   const setEditingRichText = useStoreActions(a => a.setEditingRichText);
-  const plainTextBody = useStoreState(s => s.plainTextBody);
-  const handleWordSelection = useStoreActions(a => a.handleWordSelection);
-
 
   let firstSelection: number;
   let lastSelection: number;
@@ -77,16 +75,7 @@ const InteractiveText = (): JSX.Element => {
             }
             {
               !editingRichText &&
-              <p
-                className="px-1 leading-7"
-                onMouseUp={() => {
-                  const selection = document.getSelection();
-                  if (selection) {
-                    handleWordSelection(selection)
-                  }
-                }}>
-                {plainTextBody}
-              </p>
+              <InteractiveTokens />
             }
           </div>
         }

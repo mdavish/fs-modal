@@ -14,6 +14,7 @@ import {
   findSelectedParagraphs,
   segmentRichText,
   markdownToPlainText,
+  tokenizePlainText
 } from "./utils";
 
 interface EntityResponse {
@@ -52,6 +53,7 @@ interface StoreModel {
   toggleParagraphSelection: Action<StoreModel, number>;
   plainTextSelection?: string;
   plainTextBody: Computed<StoreModel, string | undefined>;
+  tokenizedPlainTextBody: Computed<StoreModel, string[] | undefined>;
   handleWordSelection: Action<StoreModel, Selection>;
   editingRichText: boolean;
   setEditingRichText: Action<StoreModel, boolean>;
@@ -246,6 +248,13 @@ export const store = createStore<StoreModel>({
     if (entityData) {
       const body = entityData.response.body;
       return markdownToPlainText(body);
+    } else {
+      return undefined;
+    }
+  }),
+  tokenizedPlainTextBody: computed([s => s.plainTextBody], plainTextBody => {
+    if (plainTextBody) {
+      return tokenizePlainText(plainTextBody);
     } else {
       return undefined;
     }
